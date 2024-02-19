@@ -18,11 +18,11 @@ class ShapeController extends Controller
         $shapes = Shape::paginate($perPage, ['*'], 'page', $page);
 
         if($shapes->count() > 0){
-            // if $shapes > 0, return success
+            // if record > 0, return success
             return response()->json($shapes);
 
         }else{
-            // if $shapes < 0, return not found
+            // if record < 0, return not found
             return response()->json([
                 'status' => 404,
                 'data' => 'No Records Found.'
@@ -32,6 +32,7 @@ class ShapeController extends Controller
 
     public function store(Request $request)
     {
+        // validation request
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string'],
             'color' =>  ['required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
@@ -40,6 +41,7 @@ class ShapeController extends Controller
         ]);
 
         if($validator->fails()){
+            // if validation fails, will send 422 error message
             return response()->json([
                 'status' => 422,
                 'data' => $validator->messages()
@@ -50,6 +52,7 @@ class ShapeController extends Controller
         $shapeInfo = Shape::create($data);
 
         if($shapeInfo){
+            // return record data and success 201
             return response()->json([
                 'status' => 201,
                 'data' => $shapeInfo
@@ -67,11 +70,13 @@ class ShapeController extends Controller
         $shape = Shape::find($id);
 
         if($shape){
+            // if record exist, will return success
             return response()->json([
                 'status' => 200,
                 'data' => $shape
             ], 200);
         }else{
+            // if record does not exist, will return error 404 message
             return response()->json([
                 'status' => 404,
                 'data' => 'No Record Found.'
@@ -81,6 +86,7 @@ class ShapeController extends Controller
 
     public function update(Request $request, $id)
     {
+        // validation request. Add "sometimes" to allow validation only when the field is present
         $validator = Validator::make($request->all(), [
             'name' => ['sometimes', 'required', 'string'],
             'color' =>  ['sometimes', 'required', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
@@ -89,6 +95,7 @@ class ShapeController extends Controller
         ]);
 
         if($validator->fails()){
+            // if validation fails, return 422 error message
             return response()->json([
                 'status' => 422,
                 'data' => $validator->messages()
@@ -119,12 +126,14 @@ class ShapeController extends Controller
         $shape = Shape::find($id);
 
         if($shape){
+            // if record exist, will delete the record and return success
             $shape->delete();
             return response()->json([
                 'status' => 204,
                 'data' => 'Sucessfully delete shape.'
             ], 204);
         }else{
+            // if record does not exist, will return 404 error message
             return response()->json([
                 'status' => 404,
                 'data' => 'No Record Found.'

@@ -15,6 +15,7 @@ class ValidShape implements Rule
      */
     public function passes($attribute, $value)
     {
+        // only allows five shapes
         $validShapes = ['circle', 'triangle', 'square', 'star', 'rectangle'];
         return in_array($value, $validShapes);
     }

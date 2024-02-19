@@ -21,7 +21,7 @@ class ShapeFactory extends Factory
         return [
             'name' => $this->faker->word,
             'color' => $this->faker->hexColor,
-            'shape' => $this->faker->randomElement(['Circle', 'Square', 'Triangle']),
+            'shape' => $this->faker->randomElement(['circle', 'square', 'triangle', 'star', 'rectangle']),
             'timestamp' => $this->faker->dateTime(),
         ];
     }
